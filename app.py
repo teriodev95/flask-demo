@@ -24,31 +24,40 @@ class Country(db.Model):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST':
-        name = request.form['name']
-        continent = request.form['continent']
-        flag = request.form['flag']
+    try:
+        if request.method == 'POST':
+            name = request.form['name']
+            continent = request.form['continent']
+            flag = request.form['flag']
+            
+            new_country = Country(name=name, continent=continent, flag=flag)
+            db.session.add(new_country)
+            db.session.commit()
+            
+            return redirect(url_for('index'))
         
-        new_country = Country(name=name, continent=continent, flag=flag)
-        db.session.add(new_country)
-        db.session.commit()
+        # Solo intentamos crear la tabla si estamos en desarrollo local
+        if not os.environ.get('VERCEL_ENVIRONMENT') == 'production':
+            with app.app_context():
+                db.create_all()
         
-        return redirect(url_for('index'))
-    
-    countries = Country.query.all()
-    return render_template('index.html', countries=countries)
+        countries = Country.query.all()
+        return render_template('index.html', countries=countries)
+    except Exception as e:
+        return str(e), 500
 
 @app.route('/delete/<int:id>')
 def delete(id):
-    country = Country.query.get_or_404(id)
-    db.session.delete(country)
-    db.session.commit()
-    return redirect(url_for('index'))
-
-# Crear las tablas de la base de datos
-with app.app_context():
-    db.create_all()
+    try:
+        country = Country.query.get_or_404(id)
+        db.session.delete(country)
+        db.session.commit()
+        return redirect(url_for('index'))
+    except Exception as e:
+        return str(e), 500
 
 # Para entorno de desarrollo local
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True) 
