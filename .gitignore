@@ -1,0 +1,39 @@
+# Entorno virtual
+venv/
+env/
+ENV/
+
+# Archivos de configuración de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Archivos de base de datos SQLite
+instance/
+*.sqlite
+*.db
+
+# Archivos de configuración de VS Code
+.vscode/
+
+# Archivos de entorno
+.env
+
+# Otros
+prompt.txt 
