@@ -1,8 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///countries.db'
+
+# Configuración para entorno de desarrollo y producción
+if os.environ.get('VERCEL_ENVIRONMENT') == 'production':
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///countries.db')
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///countries.db'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -38,7 +45,10 @@ def delete(id):
     db.session.commit()
     return redirect(url_for('index'))
 
+# Crear las tablas de la base de datos
+with app.app_context():
+    db.create_all()
+
+# Para entorno de desarrollo local
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.run(debug=True) 
