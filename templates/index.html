@@ -15,11 +15,17 @@
                             <h3 class="text-xl font-semibold text-black">{{ country.name }}</h3>
                             <p class="text-gray-500">{{ country.continent }}</p>
                         </div>
-                        <a href="{{ url_for('delete', id=country.id) }}" 
-                           class="bg-black text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors duration-300"
-                           onclick="return confirm('¿Estás seguro de eliminar este país?')">
-                            Eliminar
-                        </a>
+                        <div class="flex space-x-2">
+                            <a href="{{ url_for('edit', id=country.id) }}" 
+                               class="bg-blue-600 text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-blue-700 transition-colors duration-300">
+                                Editar
+                            </a>
+                            <a href="{{ url_for('delete', id=country.id) }}" 
+                               class="bg-black text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors duration-300"
+                               onclick="return confirm('¿Estás seguro de eliminar este país?')">
+                                Eliminar
+                            </a>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
@@ -28,14 +34,19 @@
         {% endif %}
     </div>
     
-    <!-- Formulario para agregar países -->
+    <!-- Formulario para agregar o editar países -->
     <div>
-        <h2 class="text-3xl font-bold mb-6 text-black">Agregar Nuevo País</h2>
-        
-        <form method="POST" class="space-y-6 border border-gray-200 p-8 rounded-2xl shadow-sm bg-white animate-fade-in delay-150">
+        {% if edit_country %}
+            <h2 class="text-3xl font-bold mb-6 text-black">Editar País</h2>
+            <form method="POST" action="{{ url_for('update', id=edit_country.id) }}" class="space-y-6 border border-gray-200 p-8 rounded-2xl shadow-sm bg-white animate-fade-in delay-150">
+        {% else %}
+            <h2 class="text-3xl font-bold mb-6 text-black">Agregar Nuevo País</h2>
+            <form method="POST" class="space-y-6 border border-gray-200 p-8 rounded-2xl shadow-sm bg-white animate-fade-in delay-150">
+        {% endif %}
             <div>
                 <label for="name" class="block mb-2 font-medium text-gray-700">Nombre del País</label>
                 <input type="text" id="name" name="name" required
+                       value="{{ edit_country.name if edit_country else '' }}"
                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:outline-none transition-all duration-300">
             </div>
             
@@ -43,12 +54,12 @@
                 <label for="continent" class="block mb-2 font-medium text-gray-700">Continente</label>
                 <select id="continent" name="continent" required
                         class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:outline-none transition-all duration-300">
-                    <option value="" disabled selected>Selecciona un continente</option>
-                    <option value="América">América</option>
-                    <option value="Europa">Europa</option>
-                    <option value="Asia">Asia</option>
-                    <option value="África">África</option>
-                    <option value="Oceanía">Oceanía</option>
+                    <option value="" disabled {% if not edit_country %}selected{% endif %}>Selecciona un continente</option>
+                    <option value="América" {% if edit_country and edit_country.continent == 'América' %}selected{% endif %}>América</option>
+                    <option value="Europa" {% if edit_country and edit_country.continent == 'Europa' %}selected{% endif %}>Europa</option>
+                    <option value="Asia" {% if edit_country and edit_country.continent == 'Asia' %}selected{% endif %}>Asia</option>
+                    <option value="África" {% if edit_country and edit_country.continent == 'África' %}selected{% endif %}>África</option>
+                    <option value="Oceanía" {% if edit_country and edit_country.continent == 'Oceanía' %}selected{% endif %}>Oceanía</option>
                 </select>
             </div>
             
@@ -56,29 +67,42 @@
                 <label for="flag" class="block mb-2 font-medium text-gray-700">Bandera</label>
                 <select id="flag" name="flag" required
                         class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:outline-none transition-all duration-300">
-                    <option value="" disabled selected>Selecciona una bandera</option>
-                    <option value="🇲🇽">🇲🇽 México</option>
-                    <option value="🇺🇸">🇺🇸 Estados Unidos</option>
-                    <option value="🇯🇵">🇯🇵 Japón</option>
-                    <option value="🇫🇷">🇫🇷 Francia</option>
-                    <option value="🇧🇷">🇧🇷 Brasil</option>
-                    <option value="🇦🇺">🇦🇺 Australia</option>
+                    <option value="" disabled {% if not edit_country %}selected{% endif %}>Selecciona una bandera</option>
+                    <option value="🇲🇽" {% if edit_country and edit_country.flag == '🇲🇽' %}selected{% endif %}>🇲🇽 México</option>
+                    <option value="🇺🇸" {% if edit_country and edit_country.flag == '🇺🇸' %}selected{% endif %}>🇺🇸 Estados Unidos</option>
+                    <option value="🇯🇵" {% if edit_country and edit_country.flag == '🇯🇵' %}selected{% endif %}>🇯🇵 Japón</option>
+                    <option value="🇫🇷" {% if edit_country and edit_country.flag == '🇫🇷' %}selected{% endif %}>🇫🇷 Francia</option>
+                    <option value="🇧🇷" {% if edit_country and edit_country.flag == '🇧🇷' %}selected{% endif %}>🇧🇷 Brasil</option>
+                    <option value="🇦🇺" {% if edit_country and edit_country.flag == '🇦🇺' %}selected{% endif %}>🇦🇺 Australia</option>
                 </select>
             </div>
             
             <button type="submit" 
                     class="w-full bg-black text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-800 transition-colors duration-300">
-                Agregar País
+                {% if edit_country %}
+                    Actualizar País
+                {% else %}
+                    Agregar País
+                {% endif %}
             </button>
+
+            {% if edit_country %}
+                <a href="{{ url_for('index') }}" 
+                   class="block w-full text-center mt-4 bg-gray-300 text-black rounded-xl px-6 py-3 font-semibold hover:bg-gray-400 transition-colors duration-300">
+                    Cancelar Edición
+                </a>
+            {% endif %}
         </form>
         
-        <!-- Botón para crear país aleatorio -->
-        <div class="mt-8 animate-fade-in delay-300">
-            <a href="{{ url_for('create_random') }}" 
-               class="block w-full text-center bg-blue-600 text-white rounded-xl px-6 py-3 font-semibold hover:bg-blue-700 transition-colors duration-300">
-                Crear País Aleatorio
-            </a>
-        </div>
+        <!-- Botón para crear país aleatorio (sólo visible cuando no estamos editando) -->
+        {% if not edit_country %}
+            <div class="mt-8 animate-fade-in delay-300">
+                <a href="{{ url_for('create_random') }}" 
+                   class="block w-full text-center bg-blue-600 text-white rounded-xl px-6 py-3 font-semibold hover:bg-blue-700 transition-colors duration-300">
+                    Crear País Aleatorio
+                </a>
+            </div>
+        {% endif %}
     </div>
 </div>
 

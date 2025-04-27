@@ -77,6 +77,32 @@ def delete(id):
     
     return redirect(url_for('index'))
 
+@app.route('/edit/<int:id>', methods=['GET'])
+def edit(id):
+    # Obtener el país por ID
+    country = Country.query.get_or_404(id)
+    
+    # Obtener todos los países para mostrarlos en la página
+    countries = Country.query.all()
+    
+    # Renderizar la plantilla con el país a editar
+    return render_template('index.html', countries=countries, edit_country=country)
+
+@app.route('/update/<int:id>', methods=['POST'])
+def update(id):
+    # Obtener el país por ID
+    country = Country.query.get_or_404(id)
+    
+    # Actualizar los datos
+    country.name = request.form.get('name')
+    country.continent = request.form.get('continent')
+    country.flag = request.form.get('flag')
+    
+    # Guardar cambios
+    db.session.commit()
+    
+    return redirect(url_for('index'))
+
 @app.route('/create-random')
 def create_random():
     # Crear un país aleatorio
