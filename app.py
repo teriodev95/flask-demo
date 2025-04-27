@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import os
+from faker import Faker
+import random
+import pycountry
 
 app = Flask(__name__)
 
@@ -20,6 +23,28 @@ class Country(db.Model):
 
     def __repr__(self):
         return f'<Country {self.name}>'
+
+# Función para crear un país aleatorio
+def create_random_country():
+    fake = Faker()
+    
+    # Obtiene un país real de pycountry
+    country = random.choice(list(pycountry.countries))
+    
+    # Nombre del país
+    country_name = country.name
+    
+    # Intenta deducir continente (sólo una simulación, puedes mejorar con una librería como 'pycountry_convert')
+    continents = ["América", "Europa", "Asia", "África", "Oceanía"]
+    continent = random.choice(continents)
+    
+    # Extrae el emoji de bandera basado en el código alfa-2
+    if hasattr(country, 'alpha_2'):
+        flag = ''.join(chr(0x1F1E6 + ord(c) - ord('A')) for c in country.alpha_2)
+    else:
+        flag = "🏳️"  # bandera blanca como fallback
+    
+    return Country(name=country_name, continent=continent, flag=flag)
 
 # Rutas
 @app.route('/', methods=['GET', 'POST'])
@@ -48,6 +73,15 @@ def delete(id):
     
     # Eliminarlo
     db.session.delete(country)
+    db.session.commit()
+    
+    return redirect(url_for('index'))
+
+@app.route('/create-random')
+def create_random():
+    # Crear un país aleatorio
+    random_country = create_random_country()
+    db.session.add(random_country)
     db.session.commit()
     
     return redirect(url_for('index'))
