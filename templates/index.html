@@ -38,7 +38,11 @@
     <div>
         {% if edit_country %}
             <h2 class="text-3xl font-bold mb-6 text-black">Editar País</h2>
-            <form method="POST" action="{{ url_for('update', id=edit_country.id) }}" class="space-y-6 border border-gray-200 p-8 rounded-2xl shadow-sm bg-white animate-fade-in delay-150">
+            <form method="POST" action="{{ url_for('update', id=edit_country.id) }}" class="space-y-6 border border-gray-200 p-8 rounded-2xl shadow-sm bg-white animate-fade-in delay-150 relative">
+                <!-- Indicador visual de modo edición -->
+                <div class="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                    Modo Edición
+                </div>
         {% else %}
             <h2 class="text-3xl font-bold mb-6 text-black">Agregar Nuevo País</h2>
             <form method="POST" class="space-y-6 border border-gray-200 p-8 rounded-2xl shadow-sm bg-white animate-fade-in delay-150">
