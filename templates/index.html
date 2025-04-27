@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="grid md:grid-cols-2 gap-8">
+<div class="grid md:grid-cols-2 gap-8 p-4 md:p-8 animate-fade-in">
     <!-- Listado de países -->
     <div>
-        <h2 class="text-2xl font-bold mb-6">Países Registrados</h2>
+        <h2 class="text-3xl font-bold mb-6 text-black">Países Registrados</h2>
         
         {% if countries %}
             <div class="space-y-4">
                 {% for country in countries %}
-                    <div class="flex items-center p-4 border border-gray-200">
+                    <div class="flex items-center p-5 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 bg-white">
                         <div class="text-5xl mr-6">{{ country.flag }}</div>
                         <div class="flex-grow">
-                            <h3 class="text-xl font-medium">{{ country.name }}</h3>
-                            <p class="text-gray-600">{{ country.continent }}</p>
+                            <h3 class="text-xl font-semibold text-black">{{ country.name }}</h3>
+                            <p class="text-gray-500">{{ country.continent }}</p>
                         </div>
                         <a href="{{ url_for('delete', id=country.id) }}" 
-                           class="bg-black text-white px-4 py-2 hover:bg-gray-800"
+                           class="bg-black text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors duration-300"
                            onclick="return confirm('¿Estás seguro de eliminar este país?')">
                             Eliminar
                         </a>
@@ -24,25 +24,25 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p class="text-gray-500">No hay países registrados aún.</p>
+            <p class="text-gray-400">No hay países registrados aún.</p>
         {% endif %}
     </div>
     
     <!-- Formulario para agregar países -->
     <div>
-        <h2 class="text-2xl font-bold mb-6">Agregar Nuevo País</h2>
+        <h2 class="text-3xl font-bold mb-6 text-black">Agregar Nuevo País</h2>
         
-        <form method="POST" class="space-y-4 border border-gray-200 p-6">
+        <form method="POST" class="space-y-6 border border-gray-200 p-8 rounded-2xl shadow-sm bg-white animate-fade-in delay-150">
             <div>
-                <label for="name" class="block mb-2 font-medium">Nombre del País</label>
+                <label for="name" class="block mb-2 font-medium text-gray-700">Nombre del País</label>
                 <input type="text" id="name" name="name" required
-                       class="w-full px-4 py-2 border border-gray-300 focus:border-black focus:outline-none">
+                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:outline-none transition-all duration-300">
             </div>
             
             <div>
-                <label for="continent" class="block mb-2 font-medium">Continente</label>
+                <label for="continent" class="block mb-2 font-medium text-gray-700">Continente</label>
                 <select id="continent" name="continent" required
-                        class="w-full px-4 py-2 border border-gray-300 focus:border-black focus:outline-none">
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:outline-none transition-all duration-300">
                     <option value="" disabled selected>Selecciona un continente</option>
                     <option value="América">América</option>
                     <option value="Europa">Europa</option>
@@ -53,9 +53,9 @@
             </div>
             
             <div>
-                <label for="flag" class="block mb-2 font-medium">Bandera</label>
+                <label for="flag" class="block mb-2 font-medium text-gray-700">Bandera</label>
                 <select id="flag" name="flag" required
-                        class="w-full px-4 py-2 border border-gray-300 focus:border-black focus:outline-none">
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:outline-none transition-all duration-300">
                     <option value="" disabled selected>Selecciona una bandera</option>
                     <option value="🇲🇽">🇲🇽 México</option>
                     <option value="🇺🇸">🇺🇸 Estados Unidos</option>
@@ -66,17 +66,37 @@
                 </select>
             </div>
             
-            <button type="submit" class="w-full bg-black text-white px-4 py-2 hover:bg-gray-800">
+            <button type="submit" 
+                    class="w-full bg-black text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-800 transition-colors duration-300">
                 Agregar País
             </button>
         </form>
         
         <!-- Botón para crear país aleatorio -->
-        <div class="mt-6">
-            <a href="{{ url_for('create_random') }}" class="block w-full text-center bg-blue-600 text-white px-4 py-2 hover:bg-blue-700">
+        <div class="mt-8 animate-fade-in delay-300">
+            <a href="{{ url_for('create_random') }}" 
+               class="block w-full text-center bg-blue-600 text-white rounded-xl px-6 py-3 font-semibold hover:bg-blue-700 transition-colors duration-300">
                 Crear País Aleatorio
             </a>
         </div>
     </div>
 </div>
-{% endblock %} 
+
+<!-- Animaciones personalizadas -->
+<style>
+@keyframes fade-in {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+}
+.delay-150 {
+  animation-delay: 0.15s;
+}
+.delay-300 {
+  animation-delay: 0.3s;
+}
+</style>
+{% endblock %}
