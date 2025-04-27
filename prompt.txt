@@ -1,0 +1,83 @@
+Quiero que me generes un proyecto Flask que incluya:
+
+Una base de datos usando SQLAlchemy y SQLite.
+
+Un modelo llamado Country con los siguientes campos:
+
+id (Integer, Primary Key)
+
+name (String, nombre del país, no nulo)
+
+continent (String, continente al que pertenece, no nulo)
+
+flag (String corto, para almacenar el emoji de la bandera)
+
+Crear una página principal / que:
+
+Liste todos los países registrados mostrando:
+
+Bandera grande (emoji).
+
+Nombre del país.
+
+Continente.
+
+Permita agregar nuevos países mediante un formulario que incluya:
+
+Input de texto para el nombre del país.
+
+Select para continente (América, Europa, Asia, África, Oceanía).
+
+Select para elegir el emoji de la bandera (🇲🇽 🇺🇸 🇯🇵 🇫🇷 🇧🇷 🇦🇺).
+
+Cada país listado debe tener un botón para borrarlo individualmente.
+
+Debe usar TailwindCSS cargado por CDN para estilizar todo el frontend.
+
+El diseño visual debe ser estilo Uber:
+
+Simple, minimalista y profesional.
+
+Predominancia de espacios en blanco.
+
+Tipografías grandes, claras y de alto contraste.
+
+Botones de acción claros, rectangulares, sin bordes redondeados exagerados.
+
+Layout responsivo que funcione bien en móvil y escritorio.
+
+Cada tarjeta de país debe ser limpia: bandera grande a la izquierda y datos alineados a la derecha.
+
+Generar los siguientes archivos:
+
+app.py
+
+Carpeta templates/ con:
+
+base.html (estructura base moderna)
+
+index.html (listado y formulario de países)
+
+README.md breve explicando:
+
+Qué hace el proyecto.
+
+Cómo instalar dependencias.
+
+Cómo correrlo en MacOS y Windows.
+
+requirements.txt incluyendo:
+
+flask
+
+flask_sqlalchemy
+
+Consideraciones técnicas:
+
+El proyecto debe funcionar directamente al correr python3 app.py.
+
+Debe crear la base de datos automáticamente si no existe (db.create_all()).
+
+Ejecutar con app.run(debug=True).
+
+Código limpio, ordenado, y comentado donde sea útil.

@@ -4,11 +4,10 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
-.env
+.git/
 .vscode/
 .idea/
 *.db
 *.sqlite
 *.sqlite3
-*.log
-.DS_Store 
+*.log 
